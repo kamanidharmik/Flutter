@@ -46,6 +46,9 @@ class _ProductScreenState extends State<ProductScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+                // child: Text("data"),
+                ),
             GetBuilder(
                 init: productcontroller,
                 builder: ((controller) {
