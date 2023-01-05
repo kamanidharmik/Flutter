@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:ecommerce/modals/product_modal.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +6,7 @@ import 'package:http/http.dart' as http;
 class ProducatController extends GetxController {
   List<Products> products = [];
 
-  
+  var listtotal = [].obs;
 
   getproducts() async {
     http.Response response = await http
@@ -23,12 +22,23 @@ class ProducatController extends GetxController {
             desc: product["pro_desc"],
             image: product["pro_image"],
             fav: product["pro_favurite"]);
-        //Adding user to the list.
         products.add(prods);
       }
     } else {
       print("Data Not Found");
     }
+    update();
+  }
+
+  addcarttotal(String productid) {
+    listtotal.add(productid);
+    print("Length ${listtotal.length}");
+
+    listtotal.forEach(
+      (element) {
+        print(element.toString());
+      },
+    );
     update();
   }
 }

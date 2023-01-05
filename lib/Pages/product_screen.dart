@@ -3,6 +3,7 @@ import 'package:ecommerce/controller/product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -30,6 +31,7 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+              Obx(() => Text(productcontroller.listtotal.length.toString())),
               IconButton(
                   onPressed: () async {
                     SharedPreferences sharedPreferences =
@@ -47,43 +49,51 @@ class _ProductScreenState extends State<ProductScreen> {
         child: Column(
           children: [
             Container(
-                // child: Text("data"),
-                ),
-            GetBuilder(
-                init: productcontroller,
-                builder: ((controller) {
-                  return Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: Expanded(
-                        child: GridView.builder(
-                            itemCount: controller.products.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                            ),
-                            itemBuilder: (context, index) {
-                              var favdata =
-                                  controller.products[index].fav.toString();
-                              return Card(
-                                elevation: 5,
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      "http://192.168.43.2/e-commerce/${controller.products[index].image}",
-                                      height: 100,
-                                      width: 100,
-                                    ),
-                                    Text(controller.products[index].name),
-                                    Text(controller.products[index].desc),
-                                    ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text("Add To Cart"))
-                                  ],
-                                ),
-                              );
-                            }),
-                      ));
-                })),
+              height: MediaQuery.of(context).size.height,
+              child: GetBuilder(
+                  init: productcontroller,
+                  builder: ((controller) {
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: GridView.builder(
+                              itemCount: controller.products.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                              ),
+                              itemBuilder: (context, index) {
+                                var favdata =
+                                    controller.products[index].fav.toString();
+                                return Card(
+                                  elevation: 5,
+                                  child: Column(
+                                    children: [
+                                      Image.network(
+                                        "http://192.168.43.2/e-commerce/${controller.products[index].image}",
+                                        height: 100,
+                                        width: 100,
+                                      ),
+                                      Text(controller.products[index].name),
+                                      Text(controller.products[index].desc),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            print(controller.products[index].id
+                                                .toString());
+                                            controller.addcarttotal(controller
+                                                .products[index].id
+                                                .toString());
+                                          },
+                                          child: const Text("Add To Cart")),
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
+                    );
+                  })),
+            ),
             const SizedBox(
               height: 50,
             )
