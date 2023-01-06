@@ -1,9 +1,11 @@
+import 'package:ecommerce/Pages/cart_page.dart';
 import 'package:ecommerce/Pages/login_page.dart';
+import 'package:ecommerce/Pages/pro_data.dart';
+import 'package:ecommerce/Pages/profile_page.dart';
 import 'package:ecommerce/controller/product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -21,6 +23,12 @@ class _ProductScreenState extends State<ProductScreen> {
     productcontroller.getproducts();
   }
 
+  var cartindex = 0;
+  List pages = [
+    const ProductsData(),
+    const Profile_screen(),
+    const Cart_Screen()
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,61 +53,30 @@ class _ProductScreenState extends State<ProductScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              child: GetBuilder(
-                  init: productcontroller,
-                  builder: ((controller) {
-                    return Column(
-                      children: [
-                        Expanded(
-                          child: GridView.builder(
-                              itemCount: controller.products.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                              ),
-                              itemBuilder: (context, index) {
-                                var favdata =
-                                    controller.products[index].fav.toString();
-                                return Card(
-                                  elevation: 5,
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        "http://192.168.43.2/e-commerce/${controller.products[index].image}",
-                                        height: 100,
-                                        width: 100,
-                                      ),
-                                      Text(controller.products[index].name),
-                                      Text(controller.products[index].desc),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            print(controller.products[index].id
-                                                .toString());
-                                            controller.addcarttotal(controller
-                                                .products[index].id
-                                                .toString());
-                                          },
-                                          child: const Text("Add To Cart")),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
-                      ],
-                    );
-                  })),
-            ),
-            const SizedBox(
-              height: 50,
-            )
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: cartindex,
+        onTap: (value) {
+          setState(() {
+            cartindex = value;
+            print(cartindex);
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "Profile",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          )
+        ],
       ),
+      body: pages[cartindex],
     );
   }
 }
