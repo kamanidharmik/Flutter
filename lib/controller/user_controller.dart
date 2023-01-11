@@ -17,7 +17,7 @@ class Users extends GetxController {
   getusers(String username, String password) async {
     try {
       http.Response response = await http.post(
-          Uri.parse("http://192.168.43.2/e-commerce/loginapi.php"),
+          Uri.parse("http://192.168.43.171/e-commerce/loginapi.php"),
           body: {'username': username, 'password': password});
 
       if (response.statusCode == 200) {
@@ -35,14 +35,8 @@ class Users extends GetxController {
           if (username == user.username && password == user.password) {
             print("From Get Users : $username");
             print("From Get Users : $password");
-            Get.to(() => const ProductScreen());
-          } else {
-            // Get.snackbar(
-            //   "Error",
-            //   "Username Or Password is invalid",
-            //   snackPosition: SnackPosition.BOTTOM,
-            // );
-          }
+            Get.off(() => const ProductScreen());
+          } else {}
         }
       } else {
         print("Data Not Found");

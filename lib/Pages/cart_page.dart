@@ -13,25 +13,39 @@ class _Cart_ScreenState extends State<Cart_Screen> {
   final controller = Get.put(ProducatController());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        controller.listtotal.isEmpty
-            ? const Center(
-                child: Text("Your Cart Is Empty"),
-              )
-            : GetBuilder(
-                init: controller,
-                builder: ((cartcontroller) {
-                  return ListView.builder(
-                    itemBuilder: ((context, index) {
-                      return Card(
-                        child: Text(cartcontroller.listtotal[index].toString()),
-                      );
-                    }),
-                    itemCount: cartcontroller.listtotal.length,
-                  );
-                }))
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            child: controller.cartlist.isEmpty
+                ? const Center(
+                    child: Text("Your Cart Is Empty"),
+                  )
+                : Expanded(
+                    child: GetBuilder(
+                        init: controller,
+                        builder: ((cartcontroller) {
+                          return ListView.builder(
+                            itemBuilder: ((context, index) {
+                              return Card(
+                                elevation: 3,
+                                child: ListTile(
+                                    title: Text(
+                                        cartcontroller.cartlist[index].name),
+                                    subtitle: Text(
+                                        cartcontroller.cartlist[index].desc),
+                                    leading: Image.network(
+                                        "http://192.168.43.171/e-commerce/${controller.products[index].image}")),
+                              );
+                            }),
+                            itemCount: cartcontroller.cartlist.length,
+                          );
+                        })),
+                  ),
+          )
+        ],
+      ),
     );
   }
 }
