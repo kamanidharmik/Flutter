@@ -8,6 +8,7 @@ class ProducatController extends GetxController {
   RxBool isloading = true.obs;
   var listtotal = [].obs;
   List<Products> cartlist = [];
+  List<Products> searcheddatalist = [];
   @override
   void onInit() {
     super.onInit();
